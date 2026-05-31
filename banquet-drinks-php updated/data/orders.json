@@ -1,0 +1,249 @@
+{
+    "tables": [
+        {
+            "id": "fffa53daacb19588",
+            "number": "1",
+            "chairs": 10,
+            "server": "Ayo",
+            "section": "Kings section 1",
+            "grid_col": 2,
+            "grid_row": 2,
+            "x": 17,
+            "y": 25,
+            "ready_at": "2026-05-31T06:16:29+00:00",
+            "completed_notice_seen": true,
+            "seats": [
+                {
+                    "position": 1,
+                    "drink": "House White Wine",
+                    "notes": "",
+                    "status": "ready"
+                },
+                {
+                    "position": 2,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 3,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 4,
+                    "drink": "Vodka Lemonade",
+                    "notes": "",
+                    "status": "ready"
+                },
+                {
+                    "position": 5,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 6,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 7,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 8,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 9,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 10,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                }
+            ]
+        },
+        {
+            "id": "58191d75473ca3c7",
+            "number": "2",
+            "chairs": 10,
+            "server": "Chaise",
+            "section": "Kings section 2",
+            "grid_col": 3,
+            "grid_row": 3,
+            "x": 25,
+            "y": 38,
+            "ready_at": "",
+            "completed_notice_seen": false,
+            "seats": [
+                {
+                    "position": 1,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 2,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 3,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 4,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 5,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 6,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 7,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 8,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 9,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 10,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                }
+            ]
+        },
+        {
+            "id": "715427c6666520e4",
+            "number": "3",
+            "chairs": 10,
+            "server": "Will",
+            "section": "Kings section 3",
+            "grid_col": 4,
+            "grid_row": 2,
+            "x": 33,
+            "y": 25,
+            "ready_at": "",
+            "completed_notice_seen": false,
+            "seats": [
+                {
+                    "position": 1,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 2,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 3,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 4,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 5,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 6,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 7,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 8,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 9,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                },
+                {
+                    "position": 10,
+                    "drink": "",
+                    "notes": "",
+                    "status": "pending"
+                }
+            ]
+        }
+    ],
+    "sections": [
+        "Kings section 1",
+        "Kings section 2",
+        "Kings section 3"
+    ],
+    "servers": [
+        "Will",
+        "Ayo",
+        "Chaise"
+    ],
+    "notifications": [
+        {
+            "id": "e27156d71d7a55c7",
+            "table_id": "fffa53daacb19588",
+            "message": "Table 1 is ready for Ayo in Kings section 1.",
+            "created_at": "2026-05-31T06:16:29+00:00",
+            "seen": false
+        }
+    ],
+    "updated_at": "2026-05-31T06:16:37+00:00"
+}
