@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banquet Drinks Ordering System</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Banquet drinks service</p>
+      <h1>Table-by-table drinks ordering</h1>
+      <p class="hero-text">Seat position 1 starts at the head of the table. Servers enter drinks by table and seat, while the bar interface receives a clean production queue.</p>
+    </div>
+    <div class="stats">
+      <div><strong id="statTables">0</strong><span>Tables</span></div>
+      <div><strong id="statOrders">0</strong><span>Orders</span></div>
+      <div><strong id="statReady">0</strong><span>Ready</span></div>
+      <div><strong id="statSections">0</strong><span>Sections</span></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="#orders" data-view="orders" class="active">Order input</a>
+    <a href="#bar" data-view="bar">Bar prep screen</a>
+    <a href="#setup" data-view="setup">Setup & room plan</a>
+  </nav>
+
+  <main class="page">
+    <section id="orders" class="app-view active"></section>
+    <section id="bar" class="app-view"></section>
+    <section id="setup" class="app-view"></section>
+  </main>
+
+  <datalist id="drink-options">
+    <option value="Still Water"></option><option value="Sparkling Water"></option><option value="Coke"></option><option value="Diet Coke"></option>
+    <option value="Lemonade"></option><option value="Orange Juice"></option><option value="House Red Wine"></option><option value="House White Wine"></option>
+    <option value="Prosecco"></option><option value="Beer"></option><option value="Gin & Tonic"></option><option value="Vodka Lemonade"></option>
+    <option value="Mocktail"></option><option value="Tea"></option><option value="Coffee"></option>
+  </datalist>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="assets/app.js"></script>
+</body>
+</html>
