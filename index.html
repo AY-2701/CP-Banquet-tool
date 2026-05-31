@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banquet Drinks Ordering Tool</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Banquet Drinks Service</p>
+      <h1>Table-by-table drinks ordering</h1>
+      <p>Set up tables, assign servers, take seat-by-seat orders, and manage a bar prep queue. Seat 1 is the head of the table.</p>
+    </div>
+    <nav>
+      <button data-view="setup" class="active">Setup</button>
+      <button data-view="orders">Order Input</button>
+      <button data-view="bar">Bar Screen</button>
+      <button data-view="plan">Room Plan</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="stats">
+      <div><strong id="statTables">0</strong><span>Tables</span></div>
+      <div><strong id="statOrders">0</strong><span>Orders</span></div>
+      <div><strong id="statReady">0</strong><span>Ready</span></div>
+      <div><strong id="statSections">0</strong><span>Sections</span></div>
+    </section>
+
+    <section id="setup" class="view active">
+      <div class="panel">
+        <h2>Add table</h2>
+        <div class="form-grid">
+          <label>Table number <input id="tableNumber" value="1"></label>
+          <label>Chairs <input id="chairCount" type="number" min="1" value="10"></label>
+          <label>Server <input id="serverName" placeholder="e.g. Ayo"></label>
+          <label>Section <input id="sectionName" placeholder="e.g. Front Left"></label>
+        </div>
+        <p class="hint">Click a cell on the room grid to choose where the next table will be placed.</p>
+        <button id="addTable">Add table to selected grid cell</button>
+      </div>
+      <div class="panel">
+        <h2>Tables</h2>
+        <div id="tableList" class="table-list"></div>
+      </div>
+    </section>
+
+    <section id="orders" class="view">
+      <div class="panel">
+        <h2>Order input</h2>
+        <label>Select table <select id="orderTableSelect"></select></label>
+        <div id="seatOrders" class="seat-grid"></div>
+      </div>
+    </section>
+
+    <section id="bar" class="view">
+      <div class="panel">
+        <h2>Bar prep screen</h2>
+        <input id="barSearch" placeholder="Search table, drink, server, section or notes" />
+        <div id="barQueue" class="queue"></div>
+      </div>
+      <div class="panel">
+        <h2>Drink totals</h2>
+        <div id="drinkTotals"></div>
+      </div>
+    </section>
+
+    <section id="plan" class="view">
+      <div class="panel">
+        <h2>Clickable room plan</h2>
+        <p class="hint">Click a table to manage it. In setup, click an empty cell before adding a table.</p>
+        <div id="roomGrid" class="room-grid"></div>
+      </div>
+      <div class="panel">
+        <h2>Sections</h2>
+        <div id="sectionList"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
