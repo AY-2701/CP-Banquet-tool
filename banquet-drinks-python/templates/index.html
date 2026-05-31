@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="layout">
+  <aside class="panel sidebar">
+    <h2>Add table</h2>
+    <form method="post" action="{{ url_for('action') }}" class="stack">
+      <input type="hidden" name="action" value="add_table">
+      <label>Table number<input name="table_number" placeholder="e.g. 12"></label>
+      <label>Number of chairs<input type="number" name="chairs" min="1" value="10"></label>
+      <label>Assigned server<select name="server">{% for server in data.servers %}<option>{{ server }}</option>{% endfor %}</select></label>
+      <label>Section<select name="section">{% for section in data.sections %}<option>{{ section }}</option>{% endfor %}</select></label>
+      <button class="btn primary" type="submit">Add table</button>
+    </form>
+
+    <h2 class="mt">Table updates</h2>
+    <div class="notice-list">
+      {% for table in tables %}
+        {% set status = table_status(table) %}
+        <a class="notice-row {{ status_class(status) }}" href="{{ url_for('index', table=table.id) }}">
+          <strong>Table {{ table.number }} · {{ status }}</strong>
+          <span>{{ table.server }} · {{ table_ready_count(table) }}/{{ table_order_count(table) }} ready</span>
+        </a>
+      {% else %}<p class="muted">No tables yet.</p>{% endfor %}
+    </div>
+  </aside>
+
+  <section class="main-area">
+    {% for table in tables %}
+      {% if table_status(table) == 'Ready for server' and not table.completed_notice_seen %}
+      <div class="panel alert-panel">
+        <strong>Notification:</strong> Table {{ table.number }} is ready for {{ table.server }}.
+        <form method="post" action="{{ url_for('action') }}">
+          <input type="hidden" name="action" value="mark_notice_seen">
+          <input type="hidden" name="table_id" value="{{ table.id }}">
+          <button class="btn success" type="submit">Acknowledge</button>
+        </form>
+      </div>
+      {% endif %}
+    {% endfor %}
+
+    {% if active_table %}
+      {% set active_status = table_status(active_table) %}
+      <div class="panel table-header">
+        <div>
+          <h2>Table {{ active_table.number }}</h2>
+          <p class="muted">Position 1 is the head of the table. Assigned to {{ active_table.server }} in {{ active_table.section }}.</p>
+          <span class="status {{ status_class(active_status) }}">{{ active_status }} · {{ table_ready_count(active_table) }}/{{ table_order_count(active_table) }} ready</span>
+        </div>
+        <div class="actions-row">
+          <form method="post" action="{{ url_for('action') }}" class="inline-form">
+            <input type="hidden" name="action" value="resize_table"><input type="hidden" name="table_id" value="{{ active_table.id }}">
+            <label>Chairs<input type="number" name="chairs" min="1" value="{{ active_table.chairs }}"></label>
+            <button class="btn" type="submit">Update</button>
+          </form>
+          <form method="post" action="{{ url_for('action') }}" onsubmit="return confirm('Clear all orders for this table?')">
+            <input type="hidden" name="action" value="clear_table"><input type="hidden" name="table_id" value="{{ active_table.id }}">
+            <button class="btn warning" type="submit">Clear orders</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel meta-panel">
+        <h3>Table assignment</h3>
+        <form method="post" action="{{ url_for('action') }}" class="meta-grid compact-3">
+          <input type="hidden" name="action" value="update_table_meta"><input type="hidden" name="table_id" value="{{ active_table.id }}"><input type="hidden" name="return_to" value="{{ url_for('index', table=active_table.id) }}">
+          <label>Server<select name="server">{% for server in data.servers %}<option {% if server == active_table.server %}selected{% endif %}>{{ server }}</option>{% endfor %}</select></label>
+          <label>Section<select name="section">{% for section in data.sections %}<option {% if section == active_table.section %}selected{% endif %}>{{ section }}</option>{% endfor %}</select></label>
+          <button class="btn" type="submit">Save assignment</button>
+        </form>
+      </div>
+
+      <details class="panel delete-panel">
+        <summary>Delete this table</summary>
+        <form method="post" action="{{ url_for('action') }}" class="delete-confirm">
+          <input type="hidden" name="action" value="delete_table"><input type="hidden" name="table_id" value="{{ active_table.id }}">
+          <p class="muted">Extra confirmation required: type table number <strong>{{ active_table.number }}</strong> to delete it.</p>
+          <input name="confirm_table_number" placeholder="Type {{ active_table.number }}">
+          <button class="btn danger" type="submit">Permanently delete table</button>
+        </form>
+      </details>
+
+      <form method="post" action="{{ url_for('action') }}">
+        <input type="hidden" name="action" value="save_orders"><input type="hidden" name="table_id" value="{{ active_table.id }}">
+        <div class="seat-grid">
+          {% for seat in active_table.seats %}
+          <article class="seat-card {{ 'head-seat' if seat.position == 1 else '' }}">
+            <div class="seat-top"><div class="seat-number">{{ seat.position }}</div><div><h3>Seat position {{ seat.position }}</h3><p>{{ 'Head of table' if seat.position == 1 else 'Clockwise position' }}</p></div></div>
+            <label>Drink order<input list="drink-options" name="drink" value="{{ seat.drink }}" placeholder="e.g. Gin & Tonic"></label>
+            <label>Notes<textarea name="notes" placeholder="e.g. no ice, lemon, allergy">{{ seat.notes }}</textarea></label>
+            <span class="status {{ seat.status }}">{{ seat.status|capitalize }}</span>
+          </article>
+          {% endfor %}
+        </div>
+        <button class="btn primary sticky-save" type="submit">Save table orders</button>
+      </form>
+    {% else %}
+      <div class="panel empty"><h2>Add a table to begin</h2><p class="muted">Use the sidebar or room setup grid.</p></div>
+    {% endif %}
+  </section>
+</section>
+<datalist id="drink-options">{% for drink in common_drinks %}<option value="{{ drink }}">{% endfor %}</datalist>
+{% endblock %}

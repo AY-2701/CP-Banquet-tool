@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="setup-layout">
+  <aside class="panel sidebar">
+    <h2>Setup lists</h2>
+    <p class="muted">Add one server or room section per line. These appear on table setup and assignment screens.</p>
+    <form method="post" action="{{ url_for('action') }}" class="stack">
+      <input type="hidden" name="action" value="save_setup"><input type="hidden" name="return_to" value="{{ url_for('setup') }}">
+      <label>Servers<textarea name="servers">{{ data.servers|join('\n') }}</textarea></label>
+      <label>Sections<textarea name="sections">{{ data.sections|join('\n') }}</textarea></label>
+      <button class="btn primary" type="submit">Save setup lists</button>
+    </form>
+
+    <h2 class="mt">Click-to-place table</h2>
+    <p class="muted">Fill in the table details, then click an empty grid space. To move a table, choose it below and click a new grid space.</p>
+    <form id="grid-place-form" method="post" action="{{ url_for('action') }}" class="stack grid-place-controls">
+      <input type="hidden" name="action" value="place_table_grid"><input type="hidden" name="return_to" value="{{ url_for('setup') }}">
+      <input type="hidden" name="grid_col" id="grid_col"><input type="hidden" name="grid_row" id="grid_row">
+      <label>Mode<select name="grid_mode" id="grid_mode"><option value="add">Add new table</option><option value="move">Move existing table</option></select></label>
+      <label class="move-only hidden">Table to move<select name="move_table_id">{% for table in data.tables %}<option value="{{ table.id }}">Table {{ table.number }} — {{ table.section }}</option>{% endfor %}</select></label>
+      <div class="add-only stack">
+        <label>Table number<input name="table_number" placeholder="e.g. 12"></label>
+        <label>Chairs<input type="number" name="chairs" min="1" value="10"></label>
+        <label>Server<select name="server">{% for server in data.servers %}<option>{{ server }}</option>{% endfor %}</select></label>
+        <label>Section<select name="section">{% for section in data.sections %}<option>{{ section }}</option>{% endfor %}</select></label>
+      </div>
+      <p class="muted selected-cell" id="selected-cell-text">No grid space selected yet.</p>
+    </form>
+  </aside>
+
+  <section class="main-area">
+    <div class="panel table-header"><div><h2>Room plan overview</h2><p class="muted">Click any empty square to place a table. Existing tables can be opened, or moved by switching setup mode to “Move existing table”.</p></div></div>
+    <div class="room-grid panel" style="--cols: {{ grid_cols }}; --rows: {{ grid_rows }};">
+      {% for row in range(1, grid_rows + 1) %}{% for col in range(1, grid_cols + 1) %}
+        {% set table = table_by_cell.get((row, col)) %}
+        {% if table %}
+          {% set status = table_status(table) %}
+          <div class="grid-cell occupied" data-row="{{ row }}" data-col="{{ col }}">
+            <a class="grid-table {{ status_class(status) }}" href="{{ url_for('index', table=table.id) }}" title="Open Table {{ table.number }}">
+              <strong>{{ table.number }}</strong><span>{{ table.section }}</span><em>{{ table.server }}</em>
+            </a>
+          </div>
+        {% else %}
+          <button class="grid-cell empty-cell" type="button" data-row="{{ row }}" data-col="{{ col }}" aria-label="Place table at row {{ row }} column {{ col }}"><span>+</span></button>
+        {% endif %}
+      {% endfor %}{% endfor %}
+    </div>
+
+    <div class="table-editor-grid">
+      {% for table in data.tables %}
+      <article class="panel mini-editor">
+        <h3>Table {{ table.number }}</h3><p class="muted">Grid: row {{ table.grid_row }}, column {{ table.grid_col }}</p>
+        <form method="post" action="{{ url_for('action') }}" class="meta-grid compact">
+          <input type="hidden" name="action" value="update_table_meta"><input type="hidden" name="table_id" value="{{ table.id }}"><input type="hidden" name="return_to" value="{{ url_for('setup') }}">
+          <label>Server<select name="server">{% for server in data.servers %}<option {% if server == table.server %}selected{% endif %}>{{ server }}</option>{% endfor %}</select></label>
+          <label>Section<select name="section">{% for section in data.sections %}<option {% if section == table.section %}selected{% endif %}>{{ section }}</option>{% endfor %}</select></label>
+          <button class="btn" type="submit">Update assignment</button>
+        </form>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banquet Drinks Ordering</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<header class="hero">
+  <div>
+    <p class="eyebrow">Banquet drinks service</p>
+    <h1>Table-by-table drinks ordering</h1>
+    <p class="hero-text">Position 1 starts at the head of each table. Servers enter orders by seat, while the bar gets a clear prep queue.</p>
+  </div>
+  <div class="stats">
+    <div><strong>{{ data.tables|length }}</strong><span>Tables</span></div>
+    <div><strong>{{ data.tables|sum(attribute='chairs') if data.tables else 0 }}</strong><span>Chairs</span></div>
+    <div><strong>{{ data.tables|sum_table_orders }}</strong><span>Orders</span></div>
+    <div><strong>{{ data.tables|sum_table_ready }}</strong><span>Ready</span></div>
+  </div>
+</header>
+<nav class="tabs">
+  <a class="{{ 'active' if request.endpoint == 'index' else '' }}" href="{{ url_for('index') }}">Server input</a>
+  <a class="{{ 'active' if request.endpoint == 'bar' else '' }}" href="{{ url_for('bar') }}">Bar prep screen</a>
+  <a class="{{ 'active' if request.endpoint == 'setup' else '' }}" href="{{ url_for('setup') }}">Room setup</a>
+</nav>
+<main class="page">{% block content %}{% endblock %}</main>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

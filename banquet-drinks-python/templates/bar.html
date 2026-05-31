@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="bar-layout">
+  <section class="bar-main">
+    <div class="panel table-header"><div><h2>Bar prep queue</h2><p class="muted">Orders grouped by table with assigned server, section, seat position, drink and notes.</p></div><form method="get" class="search-form"><input name="q" value="{{ query }}" placeholder="Search table, server, section, drink"><button class="btn" type="submit">Search</button></form></div>
+    {% if data.notifications %}<div class="panel notifications"><h3>Completion notifications</h3>{% for n in data.notifications[:6] %}<p>{{ n.message }} <small>{{ n.created_at[11:16] }}</small></p>{% endfor %}</div>{% endif %}
+    {% set ns = namespace(has_orders=false) %}
+    {% for table in data.tables %}
+      {% set filtered = [] %}
+      {% for seat in table.seats %}
+        {% if seat.drink.strip() %}
+          {% set haystack = ('table ' ~ table.number ~ ' server ' ~ table.server ~ ' section ' ~ table.section ~ ' seat ' ~ seat.position ~ ' ' ~ seat.drink ~ ' ' ~ seat.notes)|lower %}
+          {% if not query or query in haystack %}{% set _ = filtered.append(seat) %}{% endif %}
+        {% endif %}
+      {% endfor %}
+      {% if filtered %}
+        {% set ns.has_orders = true %}{% set status = table_status(table) %}
+        <article class="panel queue-card {{ status_class(status) }}">
+          <div class="queue-head"><div><h3>Table {{ table.number }}</h3><p>{{ filtered|length }} drinks · {{ table.server }} · {{ table.section }}</p><span class="status {{ status_class(status) }}">{{ status }} · {{ table_ready_count(table) }}/{{ table_order_count(table) }} ready</span></div><form method="post" action="{{ url_for('action') }}"><input type="hidden" name="action" value="mark_table_ready"><input type="hidden" name="table_id" value="{{ table.id }}"><button class="btn success" type="submit">Complete table order</button></form></div>
+          <div class="queue-list">{% for seat in filtered %}<div class="queue-row"><strong>Seat {{ seat.position }}</strong><span class="drink-name">{{ seat.drink }}</span><span class="muted">{{ seat.notes or 'No notes' }}</span><span class="status {{ seat.status }}">{{ seat.status|capitalize }}</span></div>{% endfor %}</div>
+        </article>
+      {% endif %}
+    {% endfor %}
+    {% if not ns.has_orders %}<div class="panel empty"><h2>No drink orders yet</h2><p class="muted">Orders will appear here after they are saved on the server input screen.</p></div>{% endif %}
+  </section>
+
+  <aside class="panel totals">
+    <h2>Drink totals</h2>
+    {% if not totals %}<p class="muted">Totals appear after drinks are entered.</p>{% else %}{% for drink, count in totals %}<div class="total-row"><span>{{ drink }}</span><strong>{{ count }}</strong></div>{% endfor %}{% endif %}
+    <form method="post" action="{{ url_for('action') }}" onsubmit="return confirm('Reset all tables and orders?')"><input type="hidden" name="action" value="reset_all"><button class="btn danger full" type="submit">Reset event</button></form>
+  </aside>
+</section>
+{% endblock %}
